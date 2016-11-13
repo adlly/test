@@ -28,6 +28,13 @@
                 android:id="@+id/iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/net_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"/>
         </LinearLayout>
 
     </ScrollView>
@@ -43,6 +50,13 @@
         android:id="@+id/btn_req_img"
         android:text="请求图片"
         android:layout_above="@id/btn"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btn_req_imgs"
+        android:text="图片s"
+        android:layout_above="@id/btn_req_img"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

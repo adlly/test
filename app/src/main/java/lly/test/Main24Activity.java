@@ -15,7 +15,9 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 
 import lly.test.Net.Net;
@@ -28,6 +30,8 @@ public class Main24Activity extends AppCompatActivity implements View.OnClickLis
     private ImageView iv;
     private String main24 = "Main24";
     private RequestQueue requestQueue;
+    private NetworkImageView net_img;
+    private ImageLoader imageLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +45,10 @@ public class Main24Activity extends AppCompatActivity implements View.OnClickLis
        findViewById(R.id.btn).setOnClickListener(this);
         findViewById(R.id.nnew).setOnClickListener(this);
         findViewById(R.id.btn_req_img).setOnClickListener(this);
+        findViewById(R.id.btn_req_imgs).setOnClickListener(this);
         tv = (TextView) findViewById(R.id.tv);
         iv = (ImageView) findViewById(R.id.iv);
+        net_img = (NetworkImageView) findViewById(R.id.net_img);
     }
 
     @Override
@@ -106,6 +112,20 @@ public class Main24Activity extends AppCompatActivity implements View.OnClickLis
 
                 iq.setTag(main24);
                 requestQueue.add(iq);
+                break;
+
+            case R.id.btn_req_imgs:
+
+                url = "http://pic33.nipic.com/20130916/3420027_192919547000_2.jpg";
+
+                imageLoader = Net.getInstance(getApplicationContext()).getImageLoader();
+                imageLoader.get(url, ImageLoader.getImageListener(
+                        iv, R.mipmap.ic_launcher, android.R.drawable.stat_notify_sync_noanim));
+
+                net_img.setImageUrl("http://img05.tooopen.com/images/20140604/sy_62331342149.jpg",
+                        imageLoader);
+
+                break;
             default:
                 break;
         }
