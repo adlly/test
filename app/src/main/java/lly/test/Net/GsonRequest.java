@@ -13,6 +13,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
@@ -29,8 +31,8 @@ public class GsonRequest<T> extends Request<T> {
     public GsonRequest(int method, String url, Response.ErrorListener listener) {
         super(method, url, listener);
     }
-
-    public GsonRequest(int methord, String url, Map<String, String> headers, Class<T> clazz, Response.Listener<T> listener){
+//    public GsonRequest(int methord, String url, Map<String, String> headers, Class<T> clazz, Response.Listener<T> listener){
+    public GsonRequest(int methord, String url, Map<String, String> headers, Response.Listener<T> listener){
         this(methord, url, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -38,9 +40,22 @@ public class GsonRequest<T> extends Request<T> {
             }
         });
         this.headers = headers;
-        this.clazz = clazz;
+//        this.clazz = clazz;
+        findTypeArguments(getClass());
         this.listener = listener;
         gson = Net.getGson();
+    }
+
+
+    private void findTypeArguments(Type t) {
+        if (t instanceof ParameterizedType) {
+            Type[] typeArgs = ((ParameterizedType) t).getActualTypeArguments();
+            //noinspection unchecked
+            clazz = (Class<T>) typeArgs[0];
+        } else {
+            Class c = (Class) t;
+            findTypeArguments(c.getGenericSuperclass());
+        }
     }
 
     @Override

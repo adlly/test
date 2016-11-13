@@ -157,7 +157,7 @@ public class Main24Activity extends AppCompatActivity implements View.OnClickLis
                 jr.cancel();
 
                 GsonRequest<User> gr = new GsonRequest(
-                        GET, "https://jsonplaceholder.typicode.com/users/1", null, User.class, new Response.Listener<User>() {
+                        GET, "https://jsonplaceholder.typicode.com/users/1", null, new Response.Listener<User>() {
                     @Override
                     public void onResponse(User response) {
 
