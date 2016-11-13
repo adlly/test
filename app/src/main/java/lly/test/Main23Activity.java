@@ -3,12 +3,20 @@ package lly.test;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.drawable.ProgressBarDrawable;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,6 +29,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 
 public class Main23Activity extends AppCompatActivity {
 
@@ -46,6 +55,29 @@ public class Main23Activity extends AppCompatActivity {
 //                task.execute("http://image.tianjimedia.com/uploadImages/2015/105/36/6L02TLJDMI0Q.jpg");
             }
         });
+
+        SimpleDraweeView sdv = (SimpleDraweeView) findViewById(R.id.my_image_view);
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setUri("http://img.qqhsh.com/uploads/allimg/160604/2-16060410430S43.gif")
+                .setAutoPlayAnimations(true)
+//                . // 其他设置（如果有的话）
+        .build();
+
+
+        List<Drawable> backgroundsList;
+        List<Drawable> overlaysList;
+        GenericDraweeHierarchyBuilder builder =
+                new GenericDraweeHierarchyBuilder(getResources());
+        GenericDraweeHierarchy hierarchy = builder
+                .setFadeDuration(300)
+                .setPlaceholderImage(R.mipmap.ic_launcher)
+                .setProgressBarImage(new ProgressBarDrawable())
+//                .setBackgrounds(backgroundList)
+//                .setOverlays(overlaysList)
+                .build();
+        sdv.setController(controller);
+
+//        sdv.setImageURI("http://img.qqhsh.com/uploads/allimg/160604/2-16060410430S43.gif");
     }
 
     private class DwnAsyncTask extends AsyncTask<String, Integer, Bitmap> {
