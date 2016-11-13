@@ -1,50 +1,41 @@
 package lly.test;
 
-import android.app.Application;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import static com.android.volley.Request.Method.GET;
 
-public class Main24Activity extends AppCompatActivity implements View.OnClickListener {
+
+public class Main25Activity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main24);
-
+        setContentView(R.layout.activity_main25);
         initView();
     }
 
     private void initView() {
-       findViewById(R.id.btn).setOnClickListener(this);
-        findViewById(R.id.nnew).setOnClickListener(this);
         tv = (TextView) findViewById(R.id.tv);
+        findViewById(R.id.btn).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn:
-//                点击的是btn
-
-//                获得requestQueue
-                RequestQueue requestQueue = App.getRequestQueue();
-
-
-                String url = "http://httpbin.org/get";
+                RequestQueue requestQueue = Volley.newRequestQueue(this);
+                String url = "https://www.baidu.com";
                 Response.Listener<String> listener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -54,24 +45,15 @@ public class Main24Activity extends AppCompatActivity implements View.OnClickLis
                 Response.ErrorListener errorListener = new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "请求错误" + error.getLocalizedMessage()
-                        , Toast.LENGTH_SHORT).show();
+                        tv.setText("请求发送失败！" + " " + error.getLocalizedMessage());
                     }
                 };
-                StringRequest sq = new StringRequest(
-                        GET, url, listener, errorListener);
-
-                requestQueue.add(sq);
-                break;
-            case R.id.nnew:
-//                Intent intent = new Intent();
-//                intent.setClass(this,Main25Activity.class);
-                Intent intent = new Intent(this, Main25Activity.class);
-                startActivity(intent);
-
+                StringRequest stringRequest = new StringRequest(GET, url, listener, errorListener);
+                requestQueue.add(stringRequest);
                 break;
             default:
                 break;
         }
+
     }
 }
