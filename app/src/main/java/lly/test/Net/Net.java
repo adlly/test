@@ -8,6 +8,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 /**
  * Created by addy on 2016/11/13.
@@ -17,6 +18,7 @@ public class Net {
 
     private RequestQueue requestQueue;
     private ImageLoader loader;
+    private static Gson gson;
     private static Context ctx;
     private static Net net;
 
@@ -38,6 +40,8 @@ public class Net {
                 cache.put(url, bitmap);
             }
         });
+
+//        gson = new Gson();
     }
 
     public static synchronized Net getInstance(Context ctx){
@@ -53,6 +57,13 @@ public class Net {
             requestQueue = Volley.newRequestQueue(ctx);
         }
         return requestQueue;
+    }
+
+    public static Gson getGson() {
+        if(gson == null){
+            gson = new Gson();
+        }
+        return gson;
     }
 
     public <T> void addToRequestQueue(Request<T> req) {

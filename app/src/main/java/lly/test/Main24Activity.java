@@ -23,7 +23,9 @@ import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONObject;
 
+import lly.test.Net.GsonRequest;
 import lly.test.Net.Net;
+import lly.test.bean.TestResponse;
 
 import static com.android.volley.Request.Method.GET;
 
@@ -154,6 +156,21 @@ public class Main24Activity extends AppCompatActivity implements View.OnClickLis
                 jr.setTag(main24);
 
                 requestQueue.add(jr);
+                jr.cancel();
+
+                GsonRequest<TestResponse> gr = new GsonRequest(
+                        GET, "http://httpbin.org/get?a=aa", null, TestResponse.class, new Response.Listener<TestResponse>() {
+                    @Override
+                    public void onResponse(TestResponse response) {
+
+                        tv.setText(response.toString());
+                    }
+                });
+
+                requestQueue.add(gr);
+
+
+
                 break;
             default:
                 break;
