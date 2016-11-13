@@ -14,6 +14,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import lly.test.Net.Net;
+
 import static com.android.volley.Request.Method.GET;
 
 public class Main24Activity extends AppCompatActivity implements View.OnClickListener {
@@ -41,8 +43,9 @@ public class Main24Activity extends AppCompatActivity implements View.OnClickLis
 //                点击的是btn
 
 //                获得requestQueue
-                RequestQueue requestQueue = App.getRequestQueue();
+//                RequestQueue requestQueue = App.getRequestQueue();
 
+                RequestQueue requestQueue = Net.getInstance(getApplicationContext()).getRequestQueue();
 
                 String url = "http://httpbin.org/get";
                 Response.Listener<String> listener = new Response.Listener<String>() {
