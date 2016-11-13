@@ -21,7 +21,7 @@ import java.util.Map;
  * Created by addy on 2016/11/13.
  */
 
-public class GsonRequest<T> extends Request<T> {
+public abstract class GsonRequest<T> extends Request<T> implements Success {
 
     private Map<String, String> headers;
     private Class<T> clazz;
@@ -51,6 +51,7 @@ public class GsonRequest<T> extends Request<T> {
         if (t instanceof ParameterizedType) {
             Type[] typeArgs = ((ParameterizedType) t).getActualTypeArguments();
             //noinspection unchecked
+            Log.e("YY", typeArgs.toString());
             clazz = (Class<T>) typeArgs[0];
         } else {
             Class c = (Class) t;

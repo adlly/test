@@ -163,7 +163,17 @@ public class Main24Activity extends AppCompatActivity implements View.OnClickLis
 
                         tv.setText(response.toString());
                     }
-                });
+                }) {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+                };
 
                 requestQueue.add(gr);
 
