@@ -17,8 +17,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONObject;
 
 import lly.test.Net.Net;
 
@@ -46,6 +49,7 @@ public class Main24Activity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.nnew).setOnClickListener(this);
         findViewById(R.id.btn_req_img).setOnClickListener(this);
         findViewById(R.id.btn_req_imgs).setOnClickListener(this);
+        findViewById(R.id.json).setOnClickListener(this);
         tv = (TextView) findViewById(R.id.tv);
         iv = (ImageView) findViewById(R.id.iv);
         net_img = (NetworkImageView) findViewById(R.id.net_img);
@@ -125,6 +129,31 @@ public class Main24Activity extends AppCompatActivity implements View.OnClickLis
                 net_img.setImageUrl("http://img05.tooopen.com/images/20140604/sy_62331342149.jpg",
                         imageLoader);
 
+                break;
+
+            case R.id.json:
+                requestQueue = Net.getInstance(getApplicationContext()).getRequestQueue();
+
+//                JSONObject jsonRequest = new JSONObject();
+
+                Response.Listener<JSONObject> listener_json = new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        tv.setText(response.toString());
+                    }
+                };
+                Response.ErrorListener errorListener_json = new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        tv.setText(error.getLocalizedMessage());
+                        error.printStackTrace();
+                    }
+                };
+                JsonObjectRequest jr = new JsonObjectRequest(GET, "http://httpbin.org/get",
+                        null, listener_json, errorListener_json);
+                jr.setTag(main24);
+
+                requestQueue.add(jr);
                 break;
             default:
                 break;
