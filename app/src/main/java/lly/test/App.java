@@ -1,6 +1,7 @@
 package lly.test;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.android.volley.Cache;
 import com.android.volley.Network;
@@ -18,11 +19,14 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 public class App extends Application {
 
 //    private static RequestQueue requestQueue;
+    private static Context context;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Fresco.initialize(this);
+
+        context = this;
 
 //        requestQueue = Volley.newRequestQueue(this);
         // Instantiate the cache
@@ -37,4 +41,8 @@ public class App extends Application {
    /* public static RequestQueue getRequestQueue() {
         return requestQueue;
     }*/
+
+    public static Context getContext() {
+        return context;
+    }
 }

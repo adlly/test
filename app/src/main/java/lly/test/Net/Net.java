@@ -10,21 +10,24 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
+import lly.test.App;
+
 /**
  * Created by addy on 2016/11/13.
  */
 
 public class Net {
 
-    private RequestQueue requestQueue;
-    private ImageLoader loader;
+    private static RequestQueue requestQueue;
+    private static ImageLoader loader;
     private static Gson gson;
+    /** 请使用 ApplicaitonContext */
     private static Context ctx;
     private static Net net;
 
 
     private Net(Context ctx) {
-        this.ctx = ctx;
+        Net.ctx = ctx;
         this.requestQueue = getRequestQueue();
 
         loader = new ImageLoader(requestQueue, new ImageLoader.ImageCache() {
@@ -59,7 +62,8 @@ public class Net {
         return requestQueue;
     }
 
-    public static Gson getGson() {
+    public Gson getGson() {
+
         if(gson == null){
             gson = new Gson();
         }
@@ -73,4 +77,17 @@ public class Net {
     public ImageLoader getImageLoader() {
         return loader;
     }
+
+    public static <T> void addRequest(String tag, GsonRequest<T> req){
+        if(net == null) {
+            net = getInstance(App.getContext());
+        }
+        req.setTag(tag);
+        requestQueue.add(req);
+    }
+
+    public static void cancel(Object tag){
+        requestQueue.cancelAll(tag);
+    }
+
 }

@@ -1,7 +1,5 @@
 package lly.test.Net;
 
-import android.util.Log;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -17,6 +15,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
 
+import lly.test.App;
+
+import static com.android.volley.Request.Method.GET;
+import static com.android.volley.Request.Method.POST;
+
 /**
  * Created by addy on 2016/11/13.
  */
@@ -24,6 +27,7 @@ import java.util.Map;
 public abstract class GsonRequest<T> extends Request<T> implements Success<T>{
 
     private Map<String, String> headers;
+    private Map<String, String> params;
     private Class<T> clazz;
 //    private Success<T> listener;
     private Gson gson;
@@ -32,7 +36,7 @@ public abstract class GsonRequest<T> extends Request<T> implements Success<T>{
         super(method, url, listener);
     }
 //    public GsonRequest(int methord, String url, Map<String, String> headers, Class<T> clazz, Response.Listener<T> listener){
-    public GsonRequest(int methord, String url, Map<String, String> headers){
+    public GsonRequest(int methord, String url, Map<String, String> headers, Map<String, String> params){
         this(methord, url, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -40,12 +44,25 @@ public abstract class GsonRequest<T> extends Request<T> implements Success<T>{
             }
         });
         this.headers = headers;
+        this.params = params;
 //        this.clazz = clazz;
         findTypeArguments(getClass());
 //        this.listener = listener;
-        gson = Net.getGson();
+        gson = Net.getInstance(App.getContext()).getGson();
     }
 
+
+    /**
+     * @param url get the json from {url}
+     *
+     */
+    public GsonRequest(String url){
+        this(GET, url, null, null);
+    }
+
+    public GsonRequest(String url, Map<String, String> params){
+        this(POST, url, null, params);
+    }
 
     private void findTypeArguments(Type t) {
         if (t instanceof ParameterizedType) {
@@ -64,12 +81,18 @@ public abstract class GsonRequest<T> extends Request<T> implements Success<T>{
     }
 
     @Override
+    protected Map<String, String> getParams() throws AuthFailureError {
+        return params != null ? params : super.getParams();
+    }
+
+    @Override
     protected Response<T> parseNetworkResponse(NetworkResponse response) {
         try {
             String json = new String(
                     response.data,
                     HttpHeaderParser.parseCharset(response.headers));
 
+//            Log.e(getTag().toString(), json);
             T result = gson.fromJson(json, getMyType());
             return Response.success(
                     result,
