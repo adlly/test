@@ -21,8 +21,14 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import lly.test.Net.GsonRequest;
 import lly.test.Net.Net;
+import lly.test.Net.Success;
+import lly.test.bean.Name;
+import lly.test.bean.Post;
 import lly.test.bean.User;
 
 import static com.android.volley.Request.Method.GET;
@@ -156,26 +162,90 @@ public class Main24Activity extends AppCompatActivity implements View.OnClickLis
                 requestQueue.add(jr);
                 jr.cancel();
 
-                GsonRequest<User> gr = new GsonRequest(
-                        GET, "https://jsonplaceholder.typicode.com/users/1", null, new Response.Listener<User>() {
-                    @Override
-                    public void onResponse(User response) {
+                GsonRequest<User> gr = new GsonRequest<User>(
+                        GET, "https://jsonplaceholder.typicode.com/users/1", null, null) {
 
+
+                    @Override
+                    public void onSuccess(User response) {
                         tv.setText(response.toString());
                     }
-                }) {
-                    @Override
-                    public void onSuccess() {
-
-                    }
 
                     @Override
-                    public void onFailure() {
-
+                    public void onError(VolleyError error) {
+                        tv.setText(error.getNetworkTimeMs() + error.getLocalizedMessage());
                     }
                 };
 
+                gr.setTag(main24);
+
                 requestQueue.add(gr);
+                gr.cancel();
+
+                /** GET Test*/
+                String tag = "tag";
+                Net.addRequest(tag, new GsonRequest<User>("https://jsonplaceholder.typicode.com/users/1") {
+                    @Override
+                    public void onSuccess(User response) {
+                        tv.setText(response.toString());
+                    }
+
+                    @Override
+                    public void onError(VolleyError error) {
+                        tv.setText(error.getNetworkTimeMs() + error.getLocalizedMessage());
+                    }
+                });
+                Net.cancel(tag);
+                
+                /** POST Test */
+
+                /**
+                 // POST adds a random id to the object sent
+                 $.ajax('http://jsonplaceholder.typicode.com/posts', {
+                 method: 'POST',
+                 data: {
+                 title: 'foo',
+                 body: 'bar',
+                 userId: 1
+                 }
+                 }).then(function(data) {
+                 console.log(data);
+                 });
+
+                 /* will return
+                 {
+                 id: 101,
+                 title: 'foo',
+                 body: 'bar',
+                 userId: 1
+                 }
+                 */
+
+
+                /** Post 请求的参数 */
+                Map<String, String> params = new HashMap<>();
+//                params.put("title", "this is title!");
+//                params.put("body", "This is body!");
+//                params.put("userId", "0x11");
+                params.put("name", "morpheus");
+                params.put("job", "leader");
+
+
+                Net.addRequest(tag, new GsonRequest<Name>("http://reqres.in/api/users", params) {
+                    @Override
+                    public void onSuccess(Name response) {
+
+                        tv.setText(response.toString());
+                    }
+
+                    @Override
+                    public void onError(VolleyError error) {
+
+                        error.printStackTrace();
+                    }
+                });
+                
+                
 
 
 
