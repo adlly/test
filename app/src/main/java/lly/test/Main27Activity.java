@@ -27,6 +27,15 @@ public class Main27Activity extends AppCompatActivity {
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /**
+                 * 主线程不能访问网络!!!
+                 * 主线程不能访问网络!!!
+                 * 主线程不能访问网络!!!
+                 * 主线程不能访问网络!!!
+                 * 主线程不能访问网络!!!
+                 * 主线程不能访问网络!!!
+                 * */
+
                 try {
                     URL url = new URL("https://img1.imgtn.bdimg.com/it/u=949232872,2013536703&fm=11&gp=0.jpg");
                     HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
