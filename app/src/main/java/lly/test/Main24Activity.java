@@ -27,6 +27,7 @@ import java.util.Map;
 import lly.test.Net.GsonRequest;
 import lly.test.Net.Net;
 import lly.test.Net.Success;
+import lly.test.bean.Name;
 import lly.test.bean.Post;
 import lly.test.bean.User;
 
@@ -223,13 +224,16 @@ public class Main24Activity extends AppCompatActivity implements View.OnClickLis
 
                 /** Post 请求的参数 */
                 Map<String, String> params = new HashMap<>();
-                params.put("title", "this is title!");
-                params.put("body", "This is body!");
-                params.put("userId", "0x11");
+//                params.put("title", "this is title!");
+//                params.put("body", "This is body!");
+//                params.put("userId", "0x11");
+                params.put("name", "morpheus");
+                params.put("job", "leader");
 
-                Net.addRequest(tag, new GsonRequest<Post>("http://jsonplaceholder.typicode.com/posts", params) {
+
+                Net.addRequest(tag, new GsonRequest<Name>("http://reqres.in/api/users", params) {
                     @Override
-                    public void onSuccess(Post response) {
+                    public void onSuccess(Name response) {
 
                         tv.setText(response.toString());
                     }
