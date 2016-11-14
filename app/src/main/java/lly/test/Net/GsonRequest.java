@@ -21,18 +21,18 @@ import java.util.Map;
  * Created by addy on 2016/11/13.
  */
 
-public abstract class GsonRequest<T> extends Request<T> implements Success {
+public abstract class GsonRequest<T> extends Request<T> implements Success<T>{
 
     private Map<String, String> headers;
     private Class<T> clazz;
-    private Response.Listener listener;
+//    private Success<T> listener;
     private Gson gson;
 
-    public GsonRequest(int method, String url, Response.ErrorListener listener) {
+    private GsonRequest(int method, String url, Response.ErrorListener listener) {
         super(method, url, listener);
     }
 //    public GsonRequest(int methord, String url, Map<String, String> headers, Class<T> clazz, Response.Listener<T> listener){
-    public GsonRequest(int methord, String url, Map<String, String> headers, Response.Listener<T> listener){
+    public GsonRequest(int methord, String url, Map<String, String> headers){
         this(methord, url, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -42,7 +42,7 @@ public abstract class GsonRequest<T> extends Request<T> implements Success {
         this.headers = headers;
 //        this.clazz = clazz;
         findTypeArguments(getClass());
-        this.listener = listener;
+//        this.listener = listener;
         gson = Net.getGson();
     }
 
@@ -51,8 +51,7 @@ public abstract class GsonRequest<T> extends Request<T> implements Success {
         if (t instanceof ParameterizedType) {
             Type[] typeArgs = ((ParameterizedType) t).getActualTypeArguments();
             //noinspection unchecked
-            Log.e("YY", typeArgs.toString());
-            clazz = (Class<T>) typeArgs[0];
+             clazz = (Class<T>) typeArgs[0];
         } else {
             Class c = (Class) t;
             findTypeArguments(c.getGenericSuperclass());
@@ -71,8 +70,9 @@ public abstract class GsonRequest<T> extends Request<T> implements Success {
                     response.data,
                     HttpHeaderParser.parseCharset(response.headers));
 
+            T result = gson.fromJson(json, getMyType());
             return Response.success(
-                    gson.fromJson(json, clazz),
+                    result,
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));
@@ -84,6 +84,20 @@ public abstract class GsonRequest<T> extends Request<T> implements Success {
 
     @Override
     protected void deliverResponse(T response) {
-        listener.onResponse(response);
+//        listener.onSuccess(response);
+        onSuccess(response);
+    }
+
+    @Override
+    public void deliverError(VolleyError error) {
+        super.deliverError(error);
+//        listener.onError(error);
+        onError(error);
+    }
+
+    public Type getMyType()
+    {
+        // How do I return the type of T? (your question)
+        return clazz;
     }
 }

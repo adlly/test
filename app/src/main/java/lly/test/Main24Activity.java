@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import lly.test.Net.GsonRequest;
 import lly.test.Net.Net;
+import lly.test.Net.Success;
 import lly.test.bean.User;
 
 import static com.android.volley.Request.Method.GET;
@@ -156,24 +157,22 @@ public class Main24Activity extends AppCompatActivity implements View.OnClickLis
                 requestQueue.add(jr);
                 jr.cancel();
 
-                GsonRequest<User> gr = new GsonRequest(
-                        GET, "https://jsonplaceholder.typicode.com/users/1", null, new Response.Listener<User>() {
-                    @Override
-                    public void onResponse(User response) {
+                GsonRequest<User> gr = new GsonRequest<User>(
+                        GET, "https://jsonplaceholder.typicode.com/users/1", null) {
 
+
+                    @Override
+                    public void onSuccess(User response) {
                         tv.setText(response.toString());
                     }
-                }) {
-                    @Override
-                    public void onSuccess() {
-
-                    }
 
                     @Override
-                    public void onFailure() {
-
+                    public void onError(VolleyError error) {
+                        tv.setText(error.getNetworkTimeMs() + error.getLocalizedMessage());
                     }
                 };
+
+                gr.setTag(main24);
 
                 requestQueue.add(gr);
 
