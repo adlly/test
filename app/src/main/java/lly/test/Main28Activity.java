@@ -99,10 +99,12 @@ public class Main28Activity extends AppCompatActivity {
                                 Message msg = new Message();
                                 msg.what = IMAGE_VIEW;
                                 msg.obj = bitmap;
+                                handler.sendMessage(msg);
                             }
                             else{
                                 Message msg = handler.obtainMessage();
                                 msg.what = TOAST_TEXT;
+                                handler.sendMessage(msg);
 
                             }
                         } catch (MalformedURLException e) {
@@ -129,7 +131,7 @@ public class Main28Activity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-            iv.setImageBitmap(bitmap);
+           //iv.setImageBitmap(bitmap);
         }
 
         @Override
