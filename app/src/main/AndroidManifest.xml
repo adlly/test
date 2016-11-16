@@ -69,10 +69,15 @@
             </intent-filter>
             -->
         </activity>
-        <activity android:name=".Main27Activity">
-
-        </activity>
+        <activity android:name=".Main27Activity"></activity>
         <activity android:name=".Main28Activity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity android:name=".test_net.Main3Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

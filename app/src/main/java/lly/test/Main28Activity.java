@@ -18,31 +18,32 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.ExecutionException;
 
 public class Main28Activity extends AppCompatActivity {
 
     static private ImageView iv;
     private Task_Asy task_asy;
-    final static int IMAGE_VIEW = 0x11;
-    final static int TOAST_TEXT = 0x10;
-    static Main28Activity ma;
+//    final static int IMAGE_VIEW = 0x11;
+//    final static int TOAST_TEXT = 0x10;
+//    static Main28Activity ma;
 
-    static Handler handler = new Handler(){
-
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case IMAGE_VIEW:
-                    Bitmap bitmap = (Bitmap)msg.obj;
-                    iv.setImageBitmap(bitmap);
-                    break;
-                case TOAST_TEXT:
-                    Toast.makeText(ma, "下载失败!", Toast.LENGTH_SHORT).show();
-                default:
-                    break;
-            }
-        }
-    };
+//    static Handler handler = new Handler(){
+//
+//        @Override
+//        public void handleMessage(Message msg) {
+//            switch (msg.what){
+//                case IMAGE_VIEW:
+//                    Bitmap bitmap = (Bitmap)msg.obj;
+//                    iv.setImageBitmap(bitmap);
+//                    break;
+//                case TOAST_TEXT:
+//                    Toast.makeText(ma, "下载失败!", Toast.LENGTH_SHORT).show();
+//                default:
+//                    break;
+//            }
+//        }
+//    };
 
 
 
@@ -50,7 +51,7 @@ public class Main28Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main26);
-        ma = this;
+        //ma = this;
 
         initView();
     }
@@ -62,7 +63,14 @@ public class Main28Activity extends AppCompatActivity {
             public void onClick(View view) {
                 task_asy = new Task_Asy();
                 task_asy.execute("http://img1.imgtn.bdimg.com/it/u=949232872,2013536703&fm=11&gp=0.jpg");
-
+                try {
+                   // Bitmap bitmap = task_asy.get();
+                    iv.setImageBitmap(task_asy.get());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -78,35 +86,32 @@ public class Main28Activity extends AppCompatActivity {
             final String ss = strings[0];
 
 
-                new Thread(){
 
-                    @Override
-                    public void run() {
 
                         URL url = null;
                         try {
                             url = new URL(ss);
                             HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
                             urlConnection.setRequestMethod("GET");
-                            urlConnection.setConnectTimeout(5000);
-                            urlConnection.setReadTimeout(5000);
+                            urlConnection.setConnectTimeout(10000);
+                            urlConnection.setReadTimeout(10000);
                             urlConnection.connect();
 
 
                             if(urlConnection.getResponseCode() == 200){
                                 InputStream inputStream = urlConnection.getInputStream();
                                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                Message msg = new Message();
-                                msg.what = IMAGE_VIEW;
-                                msg.obj = bitmap;
-                                handler.sendMessage(msg);
+//                                Message msg = new Message();
+//                                msg.what = IMAGE_VIEW;
+//                                msg.obj = bitmap;
+//                                handler.sendMessage(msg);
                             }
-                            else{
-                                Message msg = handler.obtainMessage();
-                                msg.what = TOAST_TEXT;
-                                handler.sendMessage(msg);
-
-                            }
+//                            else{
+//                                Message msg = handler.obtainMessage();
+//                                msg.what = TOAST_TEXT;
+//                                handler.sendMessage(msg);
+//
+//                            }
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
                         } catch (ProtocolException e) {
@@ -115,8 +120,7 @@ public class Main28Activity extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
-                    }
-                }.start();
+
 
 
 
