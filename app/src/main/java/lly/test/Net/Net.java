@@ -28,7 +28,7 @@ public class Net {
 
     private Net(Context ctx) {
         Net.ctx = ctx;
-        this.requestQueue = getRequestQueue();
+        requestQueue = getRequestQueue();
 
         loader = new ImageLoader(requestQueue, new ImageLoader.ImageCache() {
             private final LruCache<String, Bitmap>

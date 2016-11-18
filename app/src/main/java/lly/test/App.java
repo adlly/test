@@ -3,13 +3,6 @@ package lly.test;
 import android.app.Application;
 import android.content.Context;
 
-import com.android.volley.Cache;
-import com.android.volley.Network;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.Volley;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
 /**
@@ -20,12 +13,13 @@ public class App extends Application {
 
 //    private static RequestQueue requestQueue;
     private static Context context;
+    private static App app;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Fresco.initialize(this);
-
+        app = this;
         context = this;
 
 //        requestQueue = Volley.newRequestQueue(this);
@@ -44,5 +38,9 @@ public class App extends Application {
 
     public static Context getContext() {
         return context;
+    }
+
+    public static App getApp() {
+        return app;
     }
 }
