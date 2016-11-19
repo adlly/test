@@ -3,19 +3,26 @@ package lly.test;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.LruCache;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import lly.test.tmp.TestRequest;
 
@@ -27,6 +34,8 @@ public class Main210Activity extends AppCompatActivity implements View.OnClickLi
     private NetworkImageView net_iv;
     private ImageLoader imageLoader;
     private ImageView iv2;
+    private TextView tv2;
+    private TextView tv3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +58,8 @@ public class Main210Activity extends AppCompatActivity implements View.OnClickLi
         iv = (ImageView) findViewById(R.id.iv);
         net_iv = (NetworkImageView) findViewById(R.id.net_iv);
         iv2 = (ImageView) findViewById(R.id.iv2);
+        tv2 = (TextView) findViewById(R.id.tv2);
+        tv3 = (TextView) findViewById(R.id.tv3);
     }
 
     @Override
@@ -96,6 +107,45 @@ public class Main210Activity extends AppCompatActivity implements View.OnClickLi
                 imageLoader.get(path3, ImageLoader.getImageListener(iv2, R.mipmap.ic_launcher, R.mipmap.ic_launcher));
 
                 net_iv.setImageUrl(path3, imageLoader);
+
+                String path4 = "http://192.168.1.106:3000/api/1";
+
+
+                Response.Listener<JSONObject> listener3 = new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        tv2.setText(response.opt("message").toString());
+
+                    }
+                };
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, path4, null, listener3, null);
+
+                requestQueue.add(jsonObjectRequest);
+
+                String path5 = "http://192.168.1.106:3000/api/2";
+
+
+                Response.Listener<JSONArray> listener5 = new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        int length = response.length();
+
+
+                        for (int i = 0; i < length; i++) {
+
+                            String message = response.optJSONObject(i).optString("message");
+                            Log.e("xx", message);
+                            tv3.append(message + "\n");
+
+                        }
+
+                      //  tv3.setText(response.toString());
+                    }
+                };
+                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(path5, listener5, null);
+                requestQueue.add(jsonArrayRequest);
+
 
                 break;
             default:

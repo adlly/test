@@ -4,8 +4,10 @@ import android.app.Application;
 import android.graphics.Bitmap;
 import android.util.LruCache;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 /**
@@ -52,6 +54,8 @@ public class TestRequest {
     public ImageLoader getImageLoader() {
         return imageLoader;
     }
+
+//    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,)
 
 
 }
