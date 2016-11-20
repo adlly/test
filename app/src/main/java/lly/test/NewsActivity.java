@@ -1,8 +1,11 @@
 package lly.test;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -30,7 +33,6 @@ public class NewsActivity extends AppCompatActivity {
 
     private ListView listView;
     private RequestQueue requestQueue;
-    private ImageLoader imageLoader;
     private String url = "http://apis.baidu.com/txapi/apple/apple?num=50&page=1";
     private List<NewsItem> lists;
 
@@ -48,7 +50,6 @@ public class NewsActivity extends AppCompatActivity {
 
         lists = new ArrayList<>();
         requestQueue = TestRequest.getInstance(getApplication()).getRequestQueue();
-        imageLoader = TestRequest.getInstance(getApplication()).getImageLoader();
 
         String[]args = new String[8];
 
@@ -78,6 +79,14 @@ public class NewsActivity extends AppCompatActivity {
 
                     }
                     listView.setAdapter(new NewsAdapter(lists));
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(NewsActivity.this, WebViewActivity.class);
+                            intent.putExtra("url", lists.get(position).getUrl());
+                            startActivity(intent);
+                        }
+                    });
 
                 }else{
                     Toast.makeText(getApplicationContext(), "返回数据异常!", Toast.LENGTH_SHORT).show();

@@ -98,9 +98,8 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".Main210Activity"></activity>
-        <activity android:name=".New2Activity">
-        </activity>
+        <activity android:name=".Main210Activity" />
+        <activity android:name=".New2Activity"></activity>
         <activity android:name=".NewsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -108,6 +107,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".WebViewActivity"></activity>
     </application>
 
 </manifest>
