@@ -9,6 +9,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -47,9 +48,11 @@ public class New2Activity extends AppCompatActivity {
             public void onResponse(JSONArray response) {
                 for (int i = 0; i < response.length(); i++) {
                     JSONObject post = response.optJSONObject(i);
-                    PostItem postItem = new PostItem(post.optInt("userId"), post.optInt("id"),
-                            post.optString("title"), post.optString("body"));
+//                    PostItem postItem = new PostItem(post.optInt("userId"), post.optInt("id"),
+//                            post.optString("title"), post.optString("body"));
 //                    int userId = post.optInt("userId");
+                    Gson gson = Tmp.getInstance(getApplication()).getGson();
+                    PostItem postItem = gson.fromJson(post.toString(), PostItem.class);
 
                     posts.add(postItem);
                 }

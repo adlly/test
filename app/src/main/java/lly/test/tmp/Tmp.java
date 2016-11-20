@@ -5,6 +5,7 @@ import android.app.Application;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 /**
  * Created by hz on 16/11/18.
@@ -17,6 +18,7 @@ public class Tmp {
 
     /** requestQueue */
     private static RequestQueue requestQueue;
+    private final Gson gson;
 
     /**
      * 静态成员变量
@@ -31,6 +33,8 @@ public class Tmp {
 
     private Tmp(Application application) {
         this.application = application;
+        requestQueue = Volley.newRequestQueue(application);
+        gson = new Gson();
     }
 
     /**
@@ -45,12 +49,11 @@ public class Tmp {
     }
 
     public RequestQueue getRequestQueue() {
-        synchronized (this) {
-        if(requestQueue == null){
-                requestQueue = Volley.newRequestQueue(application);
-            }
-        }
         return requestQueue;
+    }
+
+    public Gson getGson() {
+        return gson;
     }
 
     public void addRequest(StringRequest request, String tag){
